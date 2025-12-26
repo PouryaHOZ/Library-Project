@@ -1,19 +1,13 @@
 "use client"
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function TestPage() {
-  const [msg, setMsg] = useState("در حال اتصال...");
-
-  useEffect(() => {
-    fetch("http://localhost:8000/")
-      .then(res => res.json())
-      .then(data => setMsg(data.status))
-      .catch(err => setMsg("خطا در اتصال به بک‌اند پایتون!"));
-  }, []);
 
   return (
-    <div className="p-10 text-2xl font-bold">
-      وضعیت سیستم: {msg}
+    <div className='flex flex-col items-center justify-center h-screen'>
+      <h1 className='text-2xl font-bold'>به سیستم کتابخانه یارا خوش آمدید!</h1>
+      <Link href="/login" className="text-blue-500 hover:text-blue-700">برای ورود به سیستم، کلیک کنید!</Link>
     </div>
   );
 }

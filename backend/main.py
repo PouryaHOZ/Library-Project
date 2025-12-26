@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from backend.storage import check_user
 
-# این بخش حیاتی است؛ اجازه می‌دهد Next.js به پایتون وصل شود
+app = FastAPI()
+# Adding premissions for all origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # در حالت تست همه را اجازه می‌دهیم
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -15,6 +16,9 @@ app.add_middleware(
 def read_root():
     return {"status": "Backend is running!"}
 
-@app.get("/test")
-def read_root():
-    return {"status": "Working!"}
+@app.post("/login")
+def login(username: str, password: str):
+    if check_user(username, password):
+        return {"status": "Login successful!", "message": "Welcome to the library system!"}
+    else:
+        return {"status": "Login failed!", "message": "Invalid username or password!"}
