@@ -11,7 +11,10 @@ export default async function MemberClient() {
             <input placeholder="کتاب متاب حوس کردی؟" className="w-3/5 h-16 text-2xl p-4"/>
         </header>
         <main>
+            <h2>جدول امانت ها</h2>
             <LoanTable loanedBooks={loanedBooks}/>
+            <br/>
+            <h2>لیست کتاب های موجود</h2>
             <AvailableTable username={username} availableBooks={availableBooks}/>
         </main>
     </div>)
