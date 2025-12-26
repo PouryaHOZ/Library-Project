@@ -55,6 +55,7 @@ def get_user_loans(username: str):
     
 def add_loan(username, bookId):
     loans = get_loans()
+    books = get_books()
     new_loan = {
         "loan_id": loans[-1]["loan_id"]+1,
         "username": username,
@@ -64,18 +65,37 @@ def add_loan(username, bookId):
         "status": "pending"
     }
     loans.append(new_loan)
+    
+    new_books = []
+    for book in books:
+        if book["id"] == bookId:
+            book["available_count"] -= 1
+        new_books.append(book)
 
     with open('storage/loans.json', 'w', encoding='utf-8') as f:
         json.dump(loans, f, ensure_ascii=False, indent=2)
+    with open('storage/books.json', 'w', encoding='utf-8') as f:
+        json.dump(new_books, f, ensure_ascii=False, indent=2)
 
 def loan_return(loan_id):
     loans = get_loans()
+    books = get_books()
     
-    new_loans = [
-        loan
-        for loan in loans
-        if loan["loan_id"] != loan_id
-    ]
+    new_loans = []
+    book_id = 0
+    for loan in loans:
+        if loan["loan_id"] != loan_id:
+            new_loans.append(loan)
+        else:
+            book_id = loan["book_id"]
+    
+    new_books = []
+    for book in books:
+        if book["id"] == book_id:
+            book["available_count"] += 1
+        new_books.append(book)
 
     with open('storage/loans.json', 'w', encoding='utf-8') as f:
         json.dump(new_loans, f, ensure_ascii=False, indent=2)
+    with open('storage/books.json', 'w', encoding='utf-8') as f:
+        json.dump(new_books, f, ensure_ascii=False, indent=2)

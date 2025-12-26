@@ -14,13 +14,5 @@
     "book_amount": 2,
     "date": "2023-10-22",
     "status": "pending"
-  },
-  {
-    "loan_id": 102,
-    "username": "ali_82",
-    "book_id": 101,
-    "book_amount": 1,
-    "date": "2025-12-26",
-    "status": "pending"
   }
 ]
