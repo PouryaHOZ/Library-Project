@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.storage import check_user
+from placeholder import LoginRequest
+from storage import check_user
 
 app = FastAPI()
 # Adding premissions for all origins
@@ -16,9 +17,10 @@ app.add_middleware(
 def read_root():
     return {"status": "Backend is running!"}
 
-@app.post("/login")
-def login(username: str, password: str):
-    if check_user(username, password):
-        return {"status": "Login successful!", "message": "Welcome to the library system!"}
+@app.api_route("/login", methods=["GET", "POST"])
+def login(data:LoginRequest):
+    user_check = check_user(data.username, data.password)
+    if user_check:
+        return {"status": "success", "user": user_check}
     else:
-        return {"status": "Login failed!", "message": "Invalid username or password!"}
+        return {"status": "failure"}

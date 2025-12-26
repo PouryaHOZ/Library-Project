@@ -1,15 +1,18 @@
 'use client'
 import { login } from "@/lib/login";
+import router from "next/router";
 
 export default function LoginPage() {
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
-        console.log("Form submitted");
-        console.log(e.target);
+        e.preventDefault();
         const username = (e.target as HTMLFormElement).username.value;
         const password = (e.target as HTMLFormElement).password.value;
         const response = await login(username, password);
-        console.log(response.status);
-        console.log(response.message);
+        if (response.status == "success"){
+          localStorage.setItem("username", response.user.username)
+          localStorage.setItem("role", response.user.role)
+          router.push("/dashboard")
+        }
     }
   return (
     <div className='flex flex-col items-center justify-center h-screen'>

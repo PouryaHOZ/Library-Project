@@ -1,0 +1,26 @@
+[
+    {
+        "id": 101,
+        "title": "شاهنامه",
+        "author": "فردوسی",
+        "category": "ادبیات",
+        "total_count": 5,
+        "available_count": 4
+    },
+    {
+        "id": 102,
+        "title": "هری پاتر",
+        "author": "جی. کی. رولینگ",
+        "category": "تخیلی",
+        "total_count": 3,
+        "available_count": 3
+    },
+    {
+        "id": 103,
+        "title": "تاریخ بیهقی",
+        "author": "ابوالفضل بیهقی",
+        "category": "تاریخ",
+        "total_count": 2,
+        "available_count": 0
+    }
+]
