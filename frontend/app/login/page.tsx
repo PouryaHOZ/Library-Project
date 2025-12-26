@@ -1,6 +1,5 @@
 'use client'
 import { login } from "@/lib/login";
-import router from "next/router";
 
 export default function LoginPage() {
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -9,9 +8,11 @@ export default function LoginPage() {
         const password = (e.target as HTMLFormElement).password.value;
         const response = await login(username, password);
         if (response.status == "success"){
+          document.cookie = `username=${response.user.username}; path=/`;
+          document.cookie = `role=${response.user.role}; path=/`;
           localStorage.setItem("username", response.user.username)
           localStorage.setItem("role", response.user.role)
-          router.push("/dashboard")
+          location.replace("/dashboard")
         }
     }
   return (
