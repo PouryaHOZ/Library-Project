@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from placeholder import FetchRequest, LoginRequest
-from storage import add_loan, check_user, get_available_books, get_user_loans, loan_return
+from storage import add_loan, check_user, get_available_books, get_request_list, get_user_loans, loan_return, set_loan_state
 
 app = FastAPI()
 # Adding premissions for all origins
@@ -47,3 +47,12 @@ def api(data:FetchRequest):
             loan_return(data.loan_id)
         elif data.req == "loan":
             add_loan(data.username, data.book_id)
+        elif data.req == "set_state":
+            set_loan_state(data.loan_id, data.data)
+    
+    elif data.type == "get_request_list":
+        request_list = get_request_list()
+        if request_list:
+            return {"status": "success", "data": request_list}
+        else:
+            return {"status": "failure"}

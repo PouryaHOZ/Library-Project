@@ -55,3 +55,26 @@ export async function loanReq(username: string, bookId: number){
     location.replace("/dashboard")
     return response.json();
 }
+
+export async function setLoanState(loanId:number, state: string){
+  const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ loan_id: loanId, type: "loan_req" , req: "set_state", data: state}),
+    });
+    location.replace("/dashboard")
+    return response.json();
+}
+
+export async function getRequestList(){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type: "get_request_list" }),
+    });
+    return response.json();
+}

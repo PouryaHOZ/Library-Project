@@ -40,6 +40,13 @@ def get_book_by_id(id):
             return book
     return False
 
+def get_user_by_username(username):
+    users = get_users()
+    for user in users:
+        if user['username'] == username:
+            return user
+    return False
+
 def get_user_loans(username: str):
     loans = get_loans()
     loans_list = []
@@ -99,3 +106,27 @@ def loan_return(loan_id):
         json.dump(new_loans, f, ensure_ascii=False, indent=2)
     with open('storage/books.json', 'w', encoding='utf-8') as f:
         json.dump(new_books, f, ensure_ascii=False, indent=2)
+
+def get_request_list():
+    loans = get_loans()
+    request_list = []
+    for loan in loans:
+        book = get_book_by_id(loan["book_id"])
+        user = get_user_by_username(loan["username"])
+        request_list.append(book | user | loan)
+
+    if len(request_list) > 0:
+        return request_list
+    return False
+
+def set_loan_state(loan_id, data):
+    loans = get_loans()
+    
+    i = 0
+    for loan in loans:
+        if loan["loan_id"] == loan_id:
+            loans[i]["status"] = data
+        i += 1
+
+    with open('storage/loans.json', 'w', encoding='utf-8') as f:
+        json.dump(loans, f, ensure_ascii=False, indent=2)

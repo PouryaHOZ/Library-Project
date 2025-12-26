@@ -1,6 +1,5 @@
 import { getAvailableBooks, getLoans } from "@/lib/api";
 import { getServerUserData } from "@/lib/auth";
-import Link from "next/link";
 import { AvailableTable, LoanTable } from "./table/member";
 
 export default async function MemberClient() {
@@ -15,8 +14,5 @@ export default async function MemberClient() {
             <LoanTable loanedBooks={loanedBooks}/>
             <AvailableTable username={username} availableBooks={availableBooks}/>
         </main>
-    <nav>
-        <Link href="./loan">درخواست امانت</Link>
-    </nav>
     </div>)
 }

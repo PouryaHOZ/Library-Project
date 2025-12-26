@@ -12,3 +12,4 @@ class FetchRequest(BaseModel):
     req: Optional[str] = None
     book_id: Optional[int] = None
     loan_id: Optional[int] = None
+    data: Optional[str] = None

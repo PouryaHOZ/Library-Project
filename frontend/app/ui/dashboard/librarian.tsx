@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { RequestsTable } from "./table/librarian";
+import { getRequestList } from "@/lib/api";
 
-export default function LibrarianClient(){
+export default async function LibrarianClient(){
+    const requestList = await getRequestList()
     return(<>
+            <main>
+                <h2>درخواست ها!</h2>
+                <RequestsTable requestList={requestList}/>
+            </main>
         <nav>
-            <Link href="./requests">مشاهده و مدیریت درخواست ها</Link>
             <Link href="./books/add">افزودن کتاب</Link>
             <Link href="./books/edit">ویرایش یا حذف کتاب</Link>
         </nav>
