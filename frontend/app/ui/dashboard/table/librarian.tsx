@@ -1,6 +1,6 @@
 'use client'
 
-import { loanProlongReq, loanReq, loanReturnReq, setLoanState } from "@/lib/api";
+import { addBook, loanProlongReq, loanReq, loanReturnReq, setLoanState } from "@/lib/api";
 import { stat } from "fs";
 import { useState } from "react";
 
@@ -80,50 +80,48 @@ export function RequestsTable({requestList}:{requestList: any}){
             </table>);
 }
 
-export function AvailableTable({availableBooks, username}: {availableBooks: any, username: string}){
-    availableBooks = availableBooks
+export function NewBookField(){
+    const [details, setDetails] = useState({
+        title:"",
+        author:"",
+        category:"",
+        available_count:0
+    })
     return(<table className="w-1/2">
                 <thead>
                     <tr>
                     <th>
-                        نام
+                        نام کتاب
                     </th>
                     <th>
-                        نویسنده
+                        نام نویسنده
                     </th>
                     <th>
-                        موضوع
+                        دسته بندی
                     </th>
                     <th>
-                        تعداد موجود
-                    </th>
-                    <th>
-                        درخواست امانت
+                        تعداد موجودی
                     </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {availableBooks.data.map((e:any,i:number) => {
-                        return (
-                            <tr key={`book-${i}`}>
-                                <td>
-                                    {e.title}
-                                </td>
-                                <td>
-                                    {e.author}
-                                </td>
-                                <td>
-                                    {e.category}
-                                </td>
-                                <td>
-                                    {e.available_count}
-                                </td>
-                                <td>
-                                    <button onClick={()=>loanReq(username, e.id)}>امانت؟</button>
-                                </td>
-                            </tr>
-                        )
-                    })}
+                    <tr>
+                        <td>
+                            <input required placeholder="نام کتاب" onChange={(e)=>{setDetails((details) => ({...details,title:e.target.value}))}}/>
+                        </td>
+                        <td>
+                            <input required placeholder="نویسنده" onChange={(e)=>{setDetails((details) => ({...details,author:e.target.value}))}}/>
+                        </td>
+                        <td>
+                            <input required placeholder="دسته بندی" onChange={(e)=>{setDetails((details) => ({...details,category:e.target.value}))}}/>
+                        </td>
+                        <td>
+                            <input required placeholder="تعداد موجودی" onChange={(e)=>{setDetails((details) => ({...details,available_count:Number(e.target.value)}))}}/>
+                        </td>
+                        <td>
+                            <button onClick={()=>addBook(details)}>افزودن</button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>);
 }

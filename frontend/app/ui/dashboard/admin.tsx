@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { RequestsTable } from "./table/librarian";
+import { NewBookField, RequestsTable } from "./table/librarian";
 import { getRequestList } from "@/lib/api";
 
 export default async function AdminClient(){
@@ -8,9 +8,11 @@ export default async function AdminClient(){
             <main>
                 <h2>درخواست ها!</h2>
                 <RequestsTable requestList={requestList}/>
+                <br/>
+                <h2>افزودن کتاب به کتابخانه</h2>
+                <NewBookField/>
             </main>
         <nav>
-            <Link href="./books/add">افزودن کتاب</Link>
             <Link href="./books/edit">ویرایش یا حذف کتاب</Link>
             <Link href="./users">کاربران</Link>
         </nav>

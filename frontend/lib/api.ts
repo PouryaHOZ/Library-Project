@@ -78,3 +78,14 @@ export async function getRequestList(){
     });
     return response.json();
 }
+
+export async function addBook(details : object){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type:"add_book", details }),
+    });
+    return response.json();
+}

@@ -130,3 +130,17 @@ def set_loan_state(loan_id, data):
 
     with open('storage/loans.json', 'w', encoding='utf-8') as f:
         json.dump(loans, f, ensure_ascii=False, indent=2)
+
+def add_book(details):
+    books = get_books()
+    new_book = {
+        "id": books[-1]["id"]+1,
+        "title": details.title,
+        "author": details.author,
+        "category": details.category,
+        "total_count": details.available_count,        
+        "available_count": details.available_count,        
+    }
+    books.append(new_book)
+
+    return(new_book)

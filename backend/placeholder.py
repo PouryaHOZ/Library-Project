@@ -13,3 +13,4 @@ class FetchRequest(BaseModel):
     book_id: Optional[int] = None
     loan_id: Optional[int] = None
     data: Optional[str] = None
+    details: Optional[object] = None

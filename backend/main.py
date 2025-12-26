@@ -56,3 +56,10 @@ def api(data:FetchRequest):
             return {"status": "success", "data": request_list}
         else:
             return {"status": "failure"}
+        
+    elif data.type == "add_book":
+        added_book = add_book(data.details)
+        if added_book:
+            return {"status": "success"}
+        else:
+            return {"status": "failure"}
