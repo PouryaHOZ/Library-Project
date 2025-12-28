@@ -1,6 +1,7 @@
 'use client'
 
 import { loanProlongReq, loanReq, loanReturnReq } from "@/lib/api";
+import { bookType } from "@/lib/placeholder";
 
 export function LoanTable(loanedBooks: any){
     loanedBooks = loanedBooks.loanedBooks
@@ -21,6 +22,9 @@ export function LoanTable(loanedBooks: any){
                     </th>
                     <th>
                         تاریخ درخواست
+                    </th>
+                    <th>
+                        مهلت امانت
                     </th>
                     <th>
                         وضعیت
@@ -50,7 +54,10 @@ export function LoanTable(loanedBooks: any){
                                     {e.book_amount}
                                 </td>
                                 <td>
-                                    {e.date}
+                                    {e.rention_date}
+                                </td>
+                                <td>
+                                    {e.return_date}
                                 </td>
                                 <td>
                                     {e.status}
@@ -91,23 +98,23 @@ export function AvailableTable({availableBooks, username}: {availableBooks: any,
                     </tr>
                 </thead>
                 <tbody>
-                    {availableBooks.data.map((e:any,i:number) => {
+                    {availableBooks.data.map((book:bookType,i:number) => {
                         return (
                             <tr key={`book-${i}`}>
                                 <td>
-                                    {e.title}
+                                    {book.title}
                                 </td>
                                 <td>
-                                    {e.author}
+                                    {book.author}
                                 </td>
                                 <td>
-                                    {e.category}
+                                    {book.category}
                                 </td>
                                 <td>
-                                    {e.available_count}
+                                    {book.available_count}
                                 </td>
                                 <td>
-                                    <button onClick={()=>loanReq(username, e.id)}>امانت؟</button>
+                                    <button onClick={()=>loanReq(username, book.book_id)}>امانت؟</button>
                                 </td>
                             </tr>
                         )

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import hashlib
 import json
 
@@ -111,7 +111,8 @@ def add_loan(username, bookId):
         "username": username,
         "book_id": bookId,
         "book_amount": 1,
-        "date": datetime.now().strftime("%Y-%m-%d"),
+        "rention_date": datetime.now().strftime("%Y-%m-%d"),
+        "return_date": (datetime.now() +timedelta(weeks=1)).strftime("%Y-%m-%d"),
         "status": "pending"
     }
     loans.append(new_loan)
