@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { NewBookField, RequestsTable } from "./table/librarian";
-import { getRequestList } from "@/lib/api";
+import { BookList, NewBookField, RequestsTable } from "./table/librarian";
+import { getBooks, getRequestList } from "@/lib/api";
 
 export default async function LibrarianClient(){
     const requestList = await getRequestList()
+    const books = await getBooks("available")
     return(<>
             <main>
                 <h2>درخواست ها!</h2>
@@ -11,9 +12,7 @@ export default async function LibrarianClient(){
                 <br/>
                 <h2>افزودن کتاب به کتابخانه</h2>
                 <NewBookField/>
+                <BookList books={books}/>
             </main>
-        <nav>
-            <Link href="./books/edit">ویرایش یا حذف کتاب</Link>
-        </nav>
     </>)
 }

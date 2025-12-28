@@ -3,6 +3,7 @@ import hashlib
 import json
 
 
+#Get JSON
 def get_users():
     with open('storage/users.json', 'r', encoding='utf-8') as f:
         users = json.load(f)
@@ -18,6 +19,38 @@ def get_books():
         books = json.load(f)
     return books
 
+
+#Dump JSON
+def dump_users(data):
+    with open('storage/users.json', 'w', encoding='utf-8') as f:
+        return json.dump(data, f, ensure_ascii=False, indent=2)
+
+def dump_loans(data):
+    with open('storage/loans.json', 'w', encoding='utf-8') as f:
+        return json.dump(data, f, ensure_ascii=False, indent=2)
+
+def dump_books(data):
+    with open('storage/books.json', 'w', encoding='utf-8') as f:
+        return json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+#User related functions
+def check_user(username: str, password: str):
+    users = get_users()
+    for user in users:
+        if user['username'] == username and password == user['password']:
+            return user
+    return None
+
+def get_user_by_username(username):
+    users = get_users()
+    for user in users:
+        if user['username'] == username:
+            return user
+    return None
+
+
+#Book related functions
 def get_available_books():
     books = get_books()
     return [
@@ -26,40 +59,50 @@ def get_available_books():
         if book['available_count'] > 0
     ]
 
-def check_user(username: str, password: str):
-    users = get_users()
-    for user in users:
-        if user['username'] == username and password == user['password']:
-            return user
-    return False
-
 def get_book_by_id(id):
     books = get_books()
     for book in books:
-        if book['id'] == id:
+        if book['book_id'] == id:
             return book
-    return False
+    return None
 
-def get_user_by_username(username):
-    users = get_users()
-    for user in users:
-        if user['username'] == username:
-            return user
-    return False
+def add_book(details):
+    books = get_books()
+    new_book = {
+        "id": books[-1]["id"]+1,
+        "title": details.title,
+        "author": details.author,
+        "category": details.category,
+        "total_count": details.available_count,        
+        "available_count": details.available_count,        
+    }
+    books.append(new_book)
+    
+    return dump_books(books)
 
+def remove_book(book_id):
+    books = get_books()
+    return [book
+            for book in books
+            if book["book_id"] != book_id]
+
+
+#Loan related functions
 def get_user_loans(username: str):
     loans = get_loans()
     loans_list = []
     for loan in loans:
         if loan['username'] == username:
             book_info = get_book_by_id(loan["book_id"])
+            if book_info is None:
+                continue
             loans_list.append(loan | book_info)
     
     if len(loans_list) == 0:
-        return False
+        return None
     else:
         return loans_list
-    
+
 def add_loan(username, bookId):
     loans = get_loans()
     books = get_books()
@@ -75,14 +118,12 @@ def add_loan(username, bookId):
     
     new_books = []
     for book in books:
-        if book["id"] == bookId:
+        if book["book_id"] == bookId:
             book["available_count"] -= 1
         new_books.append(book)
 
-    with open('storage/loans.json', 'w', encoding='utf-8') as f:
-        json.dump(loans, f, ensure_ascii=False, indent=2)
-    with open('storage/books.json', 'w', encoding='utf-8') as f:
-        json.dump(new_books, f, ensure_ascii=False, indent=2)
+    dump_loans(loans)
+    dump_books(new_books)
 
 def loan_return(loan_id):
     loans = get_loans()
@@ -98,22 +139,22 @@ def loan_return(loan_id):
     
     new_books = []
     for book in books:
-        if book["id"] == book_id:
+        if book["book_id"] == book_id:
             book["available_count"] += 1
         new_books.append(book)
 
-    with open('storage/loans.json', 'w', encoding='utf-8') as f:
-        json.dump(new_loans, f, ensure_ascii=False, indent=2)
-    with open('storage/books.json', 'w', encoding='utf-8') as f:
-        json.dump(new_books, f, ensure_ascii=False, indent=2)
+    dump_books(new_books)
+    dump_loans(new_loans)
 
 def get_request_list():
     loans = get_loans()
     request_list = []
     for loan in loans:
-        book = get_book_by_id(loan["book_id"])
-        user = get_user_by_username(loan["username"])
-        request_list.append(book | user | loan)
+        if loan["status"] == "pending":
+            book = get_book_by_id(loan["book_id"])
+            user = get_user_by_username(loan["username"])
+            if type(book) == dict and type(user) == dict:
+                request_list.append(book | user | loan)
 
     if len(request_list) > 0:
         return request_list
@@ -121,26 +162,21 @@ def get_request_list():
 
 def set_loan_state(loan_id, data):
     loans = get_loans()
+    books = get_books()
+    new_books = []
     
     i = 0
     for loan in loans:
         if loan["loan_id"] == loan_id:
-            loans[i]["status"] = data
+            if data == "disapproved":
+                loans.pop(i)
+                for book in books:
+                    if book["book_id"] == loan["book_id"]:
+                        book["available_count"] += 1
+                    new_books.append(book)
+            else:
+                    loans[i]["status"] = data
         i += 1
 
-    with open('storage/loans.json', 'w', encoding='utf-8') as f:
-        json.dump(loans, f, ensure_ascii=False, indent=2)
-
-def add_book(details):
-    books = get_books()
-    new_book = {
-        "id": books[-1]["id"]+1,
-        "title": details.title,
-        "author": details.author,
-        "category": details.category,
-        "total_count": details.available_count,        
-        "available_count": details.available_count,        
-    }
-    books.append(new_book)
-
-    return(new_book)
+    dump_loans(loans)
+    dump_books(new_books)

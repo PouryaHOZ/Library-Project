@@ -1,3 +1,5 @@
+import { bookType } from "./placeholder";
+
 export async function getLoans(username: string){
     const response = await fetch('http://localhost:8000/api', {
         method: 'POST',
@@ -9,15 +11,17 @@ export async function getLoans(username: string){
     return response.json();
 }
 
-export async function getAvailableBooks(){
-    const response = await fetch('http://localhost:8000/api', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({type: "get_available_books" }),
-    });
-    return response.json();
+export async function getBooks(data:string){
+  if (data != "available" && data != "all")
+    throw Error("Undefined data type.")
+  const response = await fetch('http://localhost:8000/api', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({type: "get_books", data: "available" }),
+  });
+  return response.json();
 }
 
 export async function loanProlongReq(loanId: string){
@@ -79,7 +83,7 @@ export async function getRequestList(){
     return response.json();
 }
 
-export async function addBook(details : object){
+export async function addBook(details : bookType){
     const response = await fetch('http://localhost:8000/api', {
         method: 'POST',
         headers: {
@@ -87,5 +91,30 @@ export async function addBook(details : object){
         },
         body: JSON.stringify({ type:"add_book", details }),
     });
+    location.replace("/dashboard")
+    return response.json();
+}
+
+export async function updateBook(data : bookType){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type:"update_book", data:data }),
+    });
+    location.replace("/dashboard")
+    return response.json();
+}
+
+export async function removeBook(book_id: number){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type:"remove_book", data:book_id }),
+    });
+    location.replace("/dashboard")
     return response.json();
 }

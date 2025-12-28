@@ -1,0 +1,33 @@
+export type bookType = {
+    book_id: number,
+    title: string,
+    author: string,
+    category: BookCategory,
+    total_count: number,
+    available_count: number
+}
+
+export const BOOK_CATEGORIES = [
+  "رمان",
+  "تاریخی",
+  "روان‌شناسی",
+  "علمی",
+  "فلسفه",
+  "کودک و نوجوان",
+  "زندگی‌نامه",
+  "دینی",
+  "هنر",
+  "شعر",
+  "سیاسی",
+  "اقتصادی",
+  "کامپیوتر",
+  "حقوق",
+  "پزشکی",
+  "آموزشی",
+  "زبان",
+  "داستان کوتاه",
+  "سفرنامه",
+  "علوم اجتماعی",
+] as const;
+
+export type BookCategory = typeof BOOK_CATEGORIES[number];
