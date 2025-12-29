@@ -1,13 +1,13 @@
 'use client'
 
 import { addBook, updateBook, setLoanState, removeBook } from "@/lib/api";
-import { BOOK_CATEGORIES, BookCategory, bookType, userType } from "@/lib/placeholder";
+import { BOOK_CATEGORIES, BookCategory, bookType } from "@/lib/placeholder";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function RequestsTable({requestList}:{requestList: any}){
-    return(<table className="w-1/2">
-                <thead>
+    return(<table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام کاربری
@@ -35,7 +35,7 @@ export function RequestsTable({requestList}:{requestList: any}){
                     </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white">
                     {requestList.status == "success"? requestList.data.map((ent:any,i:number) => {
                         const [status, setStatus] = useState(ent.status)
                         const checked = {pending: status == "pending",
@@ -90,8 +90,8 @@ export function NewBookField(){
         available_count:0,
         total_count:0
     })
-    return(<table className="w-1/2">
-                <thead>
+    return(<table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام کتاب
@@ -105,18 +105,21 @@ export function NewBookField(){
                     <th>
                         تعداد موجودی
                     </th>
+                    <th>
+                        
+                    </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="text-slate-700">
                     <tr>
                         <td>
-                            <input required placeholder="نام کتاب" onChange={(e)=>{setDetails((details) => ({...details,title:e.target.value}))}}/>
+                            <input required placeholder="نام کتاب" className="input-box" onChange={(e)=>{setDetails((details) => ({...details,title:e.target.value}))}}/>
                         </td>
                         <td>
-                            <input required placeholder="نویسنده" onChange={(e)=>{setDetails((details) => ({...details,author:e.target.value}))}}/>
+                            <input required placeholder="نویسنده" className="input-box" onChange={(e)=>{setDetails((details) => ({...details,author:e.target.value}))}}/>
                         </td>
                         <td>
-                        <select name="category" onChange={(e)=>{setDetails((details)=>({...details, category:e.target.value as BookCategory}))}}>
+                        <select name="category" className="input-box" onChange={(e)=>{setDetails((details)=>({...details, category:e.target.value as BookCategory}))}}>
                             {
                             BOOK_CATEGORIES.map((e:string,i)=>{
                                 return <option value={e}>{e}</option>
@@ -125,10 +128,10 @@ export function NewBookField(){
                         </select>
                         </td>
                         <td>
-                            <input required placeholder="تعداد موجودی" onChange={(e)=>{setDetails((details) => ({...details,available_count:Number(e.target.value)}))}}/>
+                            <input required placeholder="تعداد موجودی" className="input-box" onChange={(e)=>{setDetails((details) => ({...details,available_count:Number(e.target.value)}))}}/>
                         </td>
                         <td>
-                            <button onClick={()=>addBook(details)}>افزودن</button>
+                            <button className="bg-slate-500 rounded-lg text-slate-100 px-2 py-1" onClick={()=>addBook(details)}>افزودن</button>
                         </td>
                     </tr>
                 </tbody>
@@ -137,8 +140,8 @@ export function NewBookField(){
 
 
 export function BookList({books}: {books: any}){
-    return(<table className="w-1/2 shadow-2xl p-2 border-2 border-slate-100 text-center">
-                <thead>
+    return(<table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام
@@ -171,7 +174,7 @@ export function BookList({books}: {books: any}){
 export function BookRow({book}: {book:bookType}){
     const [editState, setEditState] = useState(false)
     const [fieldsState, setFieldsState] = useState<bookType>(book)
-
+    console.log(book.book_id)
     const editSwitch = (state: boolean) =>{
         if(book == fieldsState)
             setEditState(state)
@@ -194,23 +197,22 @@ export function BookRow({book}: {book:bookType}){
         if (book.total_count != book.available_count){
             alert("تعدادی از این کتاب امانت گرفته شده. شما نمیتوانید آن را حذف کنید!")
         } else {
-
             removeBook(book.book_id)
         }
     }
     return (
         <tr>
-            <td className="w-32">
+            <td className="min-w-32">
                 {editState ? (<input className="input-box" name="title" placeholder="نام کتاب" value={fieldsState.title} onChange={(e)=>{setFieldsState((fieldsState)=>({...fieldsState, title:e.target.value}))}}/>)
                 :
                 fieldsState.title}
             </td>
-            <td className="w-32">
+            <td className="min-w-32">
                 {editState ? (<input className="input-box" name="author" placeholder="نویسنده" value={fieldsState.author} onChange={(e)=>{setFieldsState((fieldsState)=>({...fieldsState, author:e.target.value}))}}/>)
                 :
                 fieldsState.author}
             </td>
-            <td className="w-32">
+            <td className="min-w-32">
                 {editState ? (<select className="input-box" name="category" onChange={(e)=>{setFieldsState((fieldsState)=>({...fieldsState, category:e.target.value as BookCategory}))}}>
                     {
                     BOOK_CATEGORIES.map((e:string,i)=>{
@@ -221,7 +223,7 @@ export function BookRow({book}: {book:bookType}){
                 :
                 fieldsState.category}
             </td>
-            <td className="w-32">
+            <td className="min-w-32">
                 {editState ? (<input className="input-box" name="number" placeholder="تعداد کل" value={fieldsState.total_count}
                 onChange={(e)=>{
                     (Number(e.target.value) - book.available_count) >= 0 ?
@@ -234,10 +236,10 @@ export function BookRow({book}: {book:bookType}){
                 fieldsState.total_count}
             </td>
             <td>
-                <PencilIcon className="size-8 mx-auto" onClick={()=>editState?editSwitch(false):editSwitch(true)}/>
+                <PencilIcon className="size-5 mx-auto" onClick={()=>editState?editSwitch(false):editSwitch(true)}/>
             </td>
             <td>
-                <TrashIcon className="size-8 mx-auto" onClick={()=>removeHandle()}/>
+                <TrashIcon className="size-5 mx-auto" onClick={()=>removeHandle()}/>
             </td>
         </tr>
     )

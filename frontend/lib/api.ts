@@ -113,7 +113,7 @@ export async function updateBook(data : bookType){
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type:"update_book", data:data }),
+        body: JSON.stringify({ type:"update_book", details:data }),
     });
     location.replace("/dashboard")
     return response.json();
@@ -137,7 +137,7 @@ export async function changeUserRole(newRole: string, username:string){
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type:"user_change_role", data:{new_role:newRole, username: username} }),
+        body: JSON.stringify({ type:"user_change_role", details:{new_role:newRole, username: username} }),
     });
     location.replace("/dashboard")
     return response.json();

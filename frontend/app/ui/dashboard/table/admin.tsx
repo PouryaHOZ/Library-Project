@@ -5,8 +5,8 @@ import { TrashIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
 
 export function UserList({users}: {users: {status: "success" | "failure", data : userType[]}}){
-    return(<table className="w-1/2 shadow-2xl p-2 border-2 border-slate-100 text-center">
-                <thead>
+    return(<table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام کاربری
@@ -48,7 +48,7 @@ export function UserRow({user}: {user: userType}){
                 {user.username}
             </td>
             <td>
-                {user.fullname}
+                {user.full_name}
             </td>
             <td>
                 <label>
@@ -68,7 +68,7 @@ export function UserRow({user}: {user: userType}){
                 </label>
             </td>
             <td>
-                <TrashIcon className="size-8 mx-auto" onClick={()=>removeHandle()}/>
+                <TrashIcon className="size-5 mx-auto" onClick={()=>removeHandle()}/>
             </td>
         </tr>
     )

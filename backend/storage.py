@@ -79,12 +79,12 @@ def get_book_by_id(id):
 def add_book(details):
     books = get_books()
     new_book = {
-        "id": books[-1]["id"]+1,
-        "title": details.title,
-        "author": details.author,
-        "category": details.category,
-        "total_count": details.available_count,        
-        "available_count": details.available_count,        
+        "book_id": books[-1]["book_id"]+1,
+        "title": details['title'],
+        "author": details['author'],
+        "category": details["category"],
+        "total_count": details["available_count"],        
+        "available_count": details["available_count"],        
     }
     books.append(new_book)
     
@@ -92,9 +92,13 @@ def add_book(details):
 
 def remove_book(book_id):
     books = get_books()
-    return [book
-            for book in books
-            if book["book_id"] != book_id]
+    updated_books = []
+
+    for book in books:
+        if book["book_id"] != book_id:
+            updated_books.append(book)
+    
+    return dump_books(updated_books)
 
 def update_book(update):
     books = get_books()

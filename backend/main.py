@@ -85,7 +85,7 @@ def api(data:FetchRequest):
             return {"status": "failure"}
         
     elif data.type == "user_change_role":
-        user_with_new_role = user_change_role()
+        user_with_new_role = user_change_role(data.details.new_role, data.details.username)
         if user_with_new_role :
             return {"status": "success"}
         else:

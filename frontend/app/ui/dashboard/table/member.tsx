@@ -2,11 +2,12 @@
 
 import { loanProlongReq, loanReq, loanReturnReq } from "@/lib/api";
 import { bookType } from "@/lib/placeholder";
+import { useState } from "react";
 
 export function LoanTable(loanedBooks: any){
     loanedBooks = loanedBooks.loanedBooks
-    return(<table className="w-1/2">
-                <thead>
+    return(<table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام
@@ -63,10 +64,10 @@ export function LoanTable(loanedBooks: any){
                                     {e.status}
                                 </td>
                                 <td>
-                                    <button onClick={()=>loanProlongReq(e.loan_id)}>تمدید؟</button>
+                                    <button className="bg-slate-500 rounded-lg text-slate-100 px-2 py-1" onClick={()=>loanProlongReq(e.loan_id)}>تمدید؟</button>
                                 </td>
                                 <td>
-                                    <button onClick={()=>loanReturnReq(e.loan_id)}>بازگردانی؟</button>
+                                    <button className="bg-slate-500 rounded-lg text-slate-100 px-2 py-1" onClick={()=>loanReturnReq(e.loan_id)}>بازگردانی؟</button>
                                 </td>
                             </tr>
                         )
@@ -76,9 +77,23 @@ export function LoanTable(loanedBooks: any){
 }
 
 export function AvailableTable({availableBooks, username}: {availableBooks: any, username: string}){
-    availableBooks = availableBooks
-    return(<table className="w-1/2">
-                <thead>
+    const [search, setSearch] = useState("")
+    const [filterText, setFilerText] = useState(0)
+    return(<>
+    <div className="flex gap-5 justify-center items-baseline">
+        <input placeholder="کتاب چی هوس کردی؟"
+                onChange={(e)=>{setSearch(e.target.value)}}
+                className="mb-2 border-2 border-slate-200 rounded-2xl py-1 px-2"/>
+
+        <label>براساس:<select
+                                onChange={(e)=>{setFilerText(Number(e.target.value))}}>
+            <option value={0}>نام کتاب</option>
+            <option value={1}>نام نویسنده</option>
+        </select></label>
+        
+    </div>
+                <table className="w-full p-2 bg-slate-50 text-center">
+                <thead className="bg-slate-200 text-slate-500">
                     <tr>
                     <th>
                         نام
@@ -99,7 +114,19 @@ export function AvailableTable({availableBooks, username}: {availableBooks: any,
                 </thead>
                 <tbody>
                     {availableBooks.data.map((book:bookType,i:number) => {
-                        return (
+                        let show = false
+
+                        if (search != ""){
+                            if (filterText == 0 && book.title.includes(search)){
+                                show = true
+                            }
+                            else if (filterText == 1 && book.author.includes(search)){
+                                show = true
+                            }
+                        }
+                        else show = true
+
+                        if (show) return (
                             <tr key={`book-${i}`}>
                                 <td>
                                     {book.title}
@@ -114,11 +141,11 @@ export function AvailableTable({availableBooks, username}: {availableBooks: any,
                                     {book.available_count}
                                 </td>
                                 <td>
-                                    <button onClick={()=>loanReq(username, book.book_id)}>امانت؟</button>
+                                    <button className="bg-slate-500 rounded-lg text-slate-100 px-2 py-1"  onClick={()=>loanReq(username, book.book_id)}>امانت؟</button>
                                 </td>
                             </tr>
                         )
                     })}
                 </tbody>
-            </table>);
+            </table></>);
 }

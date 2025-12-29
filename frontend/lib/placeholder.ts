@@ -36,6 +36,6 @@ export type BookCategory = typeof BOOK_CATEGORIES[number];
 
 export type userType = {
   username: string,
-  fullname: string,
+  full_name: string,
   role: "member" | "librarian" | "admin"
 }
