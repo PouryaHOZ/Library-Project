@@ -12,6 +12,7 @@ export default async function LibrarianClient(){
                 <br/>
                 <h2>افزودن کتاب به کتابخانه</h2>
                 <NewBookField/>
+                <h2>مدیریت کتاب ها</h2>
                 <BookList books={books}/>
             </main>
     </>)

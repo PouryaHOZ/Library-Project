@@ -49,6 +49,16 @@ def get_user_by_username(username):
             return user
     return None
 
+def user_change_role(new_role: str, username: str):
+    users = get_users()
+    updated_users = []
+    for user in users:
+        if user['username'] == username:
+            user["role"] = new_role
+        updated_users.append(user)
+    return user
+    
+
 
 #Book related functions
 def get_available_books():
@@ -86,6 +96,15 @@ def remove_book(book_id):
             for book in books
             if book["book_id"] != book_id]
 
+def update_book(update):
+    books = get_books()
+    updated_books = []
+    for book in books:
+        if book['book_id'] == update["book_id"]:
+            book = update
+        updated_books.append(book)
+    return True
+        
 
 #Loan related functions
 def get_user_loans(username: str):

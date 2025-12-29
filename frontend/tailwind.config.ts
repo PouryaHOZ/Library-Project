@@ -14,7 +14,7 @@ const config: Config = {
       bziba: "var(--font-bziba)",
       khodkar: "var(--font-khodkar)",
       morvarid: "var(--font-morvarid)",
-	    //iransansnum: "var(--font-iransans-num)",
+	    iransansnum: "var(--font-iransans-num)",
 	  },
     },
   },

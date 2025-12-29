@@ -25,14 +25,5 @@
     "rention_date": "2025-12-27",
     "return_date": "2026-1-3",
     "status": "approved"
-  },
-  {
-    "loan_id": 104,
-    "username": "ali_82",
-    "book_id": 101,
-    "book_amount": 1,
-    "rention_date": "2025-12-28",
-    "return_date": "2026-01-04",
-    "status": "pending"
   }
 ]

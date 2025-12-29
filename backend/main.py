@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from placeholder import FetchRequest, LoginRequest
-from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, loan_return, set_loan_state
+from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, get_users, loan_return, set_loan_state, update_book, user_change_role
 
 app = FastAPI()
 # Adding premissions for all origins
@@ -27,6 +27,7 @@ def login(data:LoginRequest):
     
 @app.post("/api")
 def api(data:FetchRequest):
+    print(data.data)
 
     if data.type == "user_loans":
         user_loans = get_user_loans(data.username)
@@ -65,6 +66,27 @@ def api(data:FetchRequest):
     elif data.type == "add_book":
         added_book = add_book(data.details)
         if added_book:
+            return {"status": "success"}
+        else:
+            return {"status": "failure"}
+    
+    elif data.type == "update_book":
+        updated_book = update_book(data.data)
+        if updated_book:
+            return {"status": "success"}
+        else:
+            return {"status": "failure"}
+    
+    elif data.type == "get_users":
+        users_list = get_users()
+        if len(users_list) > 0 :
+            return {"status": "success", "data": users_list}
+        else:
+            return {"status": "failure"}
+        
+    elif data.type == "user_change_role":
+        user_with_new_role = user_change_role()
+        if user_with_new_role :
             return {"status": "success"}
         else:
             return {"status": "failure"}

@@ -24,6 +24,17 @@ export async function getBooks(data:string){
   return response.json();
 }
 
+export async function getUsers(){
+  const response = await fetch('http://localhost:8000/api', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({type: "get_users"}),
+  });
+  return response.json();
+}
+
 export async function loanProlongReq(loanId: string){
     const response = await fetch('http://localhost:8000/api', {
         method: 'POST',
@@ -96,6 +107,7 @@ export async function addBook(details : bookType){
 }
 
 export async function updateBook(data : bookType){
+  console.log(data)
     const response = await fetch('http://localhost:8000/api', {
         method: 'POST',
         headers: {
@@ -114,6 +126,18 @@ export async function removeBook(book_id: number){
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ type:"remove_book", data:book_id }),
+    });
+    location.replace("/dashboard")
+    return response.json();
+}
+
+export async function changeUserRole(newRole: string, username:string){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type:"user_change_role", data:{new_role:newRole, username: username} }),
     });
     location.replace("/dashboard")
     return response.json();

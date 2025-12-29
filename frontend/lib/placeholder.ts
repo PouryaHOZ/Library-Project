@@ -9,7 +9,9 @@ export type bookType = {
 
 export const BOOK_CATEGORIES = [
   "رمان",
-  "تاریخی",
+  "تاریخ",
+  "ادبیات",
+  "تخیلی",
   "روان‌شناسی",
   "علمی",
   "فلسفه",
@@ -31,3 +33,9 @@ export const BOOK_CATEGORIES = [
 ] as const;
 
 export type BookCategory = typeof BOOK_CATEGORIES[number];
+
+export type userType = {
+  username: string,
+  fullname: string,
+  role: "member" | "librarian" | "admin"
+}
