@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from placeholder import FetchRequest, LoginRequest
-from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, get_users, loan_return, remove_book, set_loan_state, update_book, user_change_activation, user_change_active, user_change_role, user_remove
+from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, get_users, loan_return, remove_book, set_loan_state, update_book, user_change_active, user_change_role, user_create, user_remove
 
 app = FastAPI()
 # Adding premissions for all origins
@@ -27,7 +27,7 @@ def login(data:LoginRequest):
     
 @app.post("/api")
 def api(data:FetchRequest):
-    print(data.data)
+    print(data)
     #Loan related
     if data.type == "user_loans":
         user_loans = get_user_loans(data.username)
@@ -72,15 +72,14 @@ def api(data:FetchRequest):
             return {"status": "failure"}
     
     elif data.type == "update_book":
-        updated_book = update_book(data.data)
+        updated_book = update_book(data.details)
         if updated_book:
             return {"status": "success"}
         else:
             return {"status": "failure"}
     
     elif data.type == "remove_book":
-        print("#######")
-        removed_book = remove_book()
+        removed_book = remove_book(data.book_id)
         if removed_book:
             return {"status": "success"}
         else:
@@ -103,7 +102,7 @@ def api(data:FetchRequest):
             return {"status": "failure"}
 
     elif data.type == "user_change_active":
-        user_with_new_active = user_change_active(data.details.active, data.details.username)
+        user_with_new_active = user_change_active(data.details['active'], data.details['username'])
         if user_with_new_active :
             return {"status": "success"}
         else:
@@ -111,6 +110,13 @@ def api(data:FetchRequest):
         
     elif data.type == "user_remove":
         removed_user = user_remove(data.username)
+        if removed_user:
+            return {"status": "success"}
+        else:
+            return {"status": "failure"}
+
+    elif data.type == "user_create":
+        removed_user = user_create(data.details)
         if removed_user:
             return {"status": "success"}
         else:

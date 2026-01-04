@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import hashlib
 import json
+import uuid
 
 
 #Get JSON
@@ -74,7 +75,7 @@ def user_change_active(active: bool, username: str):
     updated_users = []
     for user in users:
         if user['username'] == username:
-            user["is_avtive"] = active
+            user["is_active"] = active
         updated_users.append(user)
     return dump_users(users)
     
@@ -88,6 +89,22 @@ def user_remove(username):
     
     return dump_users(updated_users)
 
+def user_create(data):
+    users = get_users()
+    if (get_user_by_username(data['username']) != None):
+        return 0
+        
+    users.append({
+        "username": data['username'],
+        "password": data['password'],
+        "full_name": data['full_name'],
+        "role": data['role'],
+        "is_removed": False,
+        "is_active": data['is_active']
+    })
+    
+    return dump_users(users)
+
 
 #Book related functions
 def get_available_books():
@@ -98,17 +115,17 @@ def get_available_books():
         if book['available_count'] > 0
     ]
 
-def get_book_by_id(id):
+def get_book_by_id(book_id):
     books = get_books()
     for book in books:
-        if book['book_id'] == id:
+        if book['book_id'] == book_id:
             return book
     return None
 
 def add_book(details):
     books = get_books()
     new_book = {
-        "book_id": books[-1]["book_id"]+1,
+        "book_id": str(uuid.uuid4()),
         "title": details['title'],
         "author": details['author'],
         "category": details["category"],
@@ -139,7 +156,7 @@ def update_book(update):
         if book['book_id'] == update["book_id"]:
             book = update
         updated_books.append(book)
-    return True
+    return dump_books(updated_books)
         
 
 #Loan related functions
@@ -162,7 +179,7 @@ def add_loan(username, bookId):
     loans = get_loans()
     books = get_books()
     new_loan = {
-        "loan_id": loans[-1]["loan_id"]+1,
+        "loan_id": str(uuid.uuid4()),
         "username": username,
         "book_id": bookId,
         "book_amount": 1,
@@ -186,7 +203,7 @@ def loan_return(loan_id):
     books = get_books()
     
     new_loans = []
-    book_id = 0
+    book_id = ""
     for loan in loans:
         if loan["loan_id"] != loan_id:
             new_loans.append(loan)
@@ -236,3 +253,4 @@ def set_loan_state(loan_id, data):
 
     dump_loans(loans)
     dump_books(new_books)
+

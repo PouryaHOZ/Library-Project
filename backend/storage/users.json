@@ -30,5 +30,13 @@
     "role": "member",
     "is_removed": false,
     "is_active": true
+  },
+  {
+    "username": "asdkasd ",
+    "password": "312321",
+    "full_name": "ASDKSA",
+    "role": "member",
+    "is_removed": true,
+    "is_active": true
   }
 ]

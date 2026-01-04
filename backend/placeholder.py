@@ -10,7 +10,7 @@ class FetchRequest(BaseModel):
     username: Optional[str] = None
     type: str
     req: Optional[str] = None
-    book_id: Optional[int] = None
-    loan_id: Optional[int] = None
+    book_id: Optional[str] = None
+    loan_id: Optional[str] = None
     data: Optional[str] = None
     details: Optional[object] = None

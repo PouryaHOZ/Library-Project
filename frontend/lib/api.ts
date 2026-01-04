@@ -59,7 +59,7 @@ export async function loanReturnReq(loanId: string) {
   return response.json();
 }
 
-export async function loanReq(username: string, bookId: number) {
+export async function loanReq(username: string, bookId: string) {
   const response = await fetch('http://localhost:8000/api', {
     method: 'POST',
     headers: {
@@ -119,7 +119,7 @@ export async function updateBook(data: bookType) {
   return response.json();
 }
 
-export async function removeBook(book_id: number) {
+export async function removeBook(book_id: string) {
   const response = await fetch('http://localhost:8000/api', {
     method: 'POST',
     headers: {

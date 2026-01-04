@@ -65,7 +65,7 @@ export function RequestsTable({ requestList }: { requestList: any }) {
 
 export function NewBookField() {
   const [details, setDetails] = useState<bookType>({
-    book_id: 0,
+    book_id: "",
     title: "",
     author: "",
     category: "رمان",
@@ -164,7 +164,7 @@ export function BookRow({ book }: { book: bookType }) {
       <td className="py-2 px-4">{editState ? <select className="input-box w-full" value={fieldsState.category} onChange={e => setFieldsState(f => ({ ...f, category: e.target.value as BookCategory }))}>{BOOK_CATEGORIES.map((c, i) => <option key={i} value={c}>{c}</option>)}</select> : fieldsState.category}</td>
       <td className="py-2 px-4">{editState ? <input type="number" className="input-box w-full" value={fieldsState.total_count} onChange={e => {
         const newTotal = Number(e.target.value);
-        if (newTotal - book.available_count >= 0) setFieldsState(f => ({ ...f, total_count: newTotal, available_count: f.available_count - f.total_count + newTotal }));
+        if (book.total_count + book.available_count - newTotal >= 0) setFieldsState(f => ({ ...f, total_count: newTotal, available_count: f.available_count - f.total_count + newTotal }));
         else alert("تعداد کل نمی تواند کمتر از تعداد امانات باشد!");
       }} /> : fieldsState.total_count}</td>
       <td className="py-2 px-4"><PencilIcon className="w-5 h-5 mx-auto cursor-pointer text-slate-600 hover:text-blue-500 transition-colors" onClick={() => editState ? editSwitch(false) : editSwitch(true)} /></td>

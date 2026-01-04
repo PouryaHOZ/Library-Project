@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BookList, NewBookField, RequestsTable } from "./table/librarian";
 import { getBooks, getRequestList, getUsers } from "@/lib/api";
-import { UserList } from "./table/admin";
+import NewUserField, { UserList } from "./table/admin";
 import LogoutButton from "./logout";
 
 export default async function AdminClient() {
@@ -45,6 +45,12 @@ export default async function AdminClient() {
                         مدیریت کاربران
                     </h2>
                     <UserList users={users} />
+                </section>
+                <section className="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-shadow duration-300">
+                    <h2 className="text-xl font-semibold text-center text-slate-800 mb-4">
+                        افزودن کاربر
+                    </h2>
+                    <NewUserField/>
                 </section>
             </div>
         </div>

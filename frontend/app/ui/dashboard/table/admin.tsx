@@ -29,7 +29,7 @@ export function UserList({ users }: { users: { status: "success" | "failure"; da
 
 export function UserRow({ user }: { user: userType }) {
   const [role, setRole] = useState(user.role)
-  const [active, setActive] = useState(user.active ?? true)
+  const [active, setActive] = useState(user.is_active ?? true)
 
   const roleHandle = (newRole: string, username: string) => {
     if (window.confirm("از ایجاد این تغییر مطمئن هستید؟")) {
@@ -39,8 +39,14 @@ export function UserRow({ user }: { user: userType }) {
   }
 
   const activeHandle = (isActive: boolean, username: string) => {
-    setActive(isActive)
-    setUserActive(isActive, username)
+    if (user.role === "admin") {
+      alert("مجاز به غیرفعال کردن ادمین نیستید!")
+      return
+    }
+    if (window.confirm("آیا مطمئن هستید؟")) {
+        setActive(isActive)
+        setUserActive(isActive, username)
+    }
   }
 
   const removeHandle = () => {
@@ -114,7 +120,7 @@ export default function NewUserField() {
       password: "",
       full_name: "",
       role: "member",
-      active: true
+      is_active: true
     })
   
     const handleAdd = () => {
@@ -123,7 +129,7 @@ export default function NewUserField() {
         return
       }
       createUser(user)
-      setUser({ username: "", password: "", full_name: "", role: "member", active: true })
+      setUser({ username: "", password: "", full_name: "", role: "member", is_active: true })
     }
   
     return (
@@ -180,8 +186,8 @@ export default function NewUserField() {
               <td className="py-2 px-3">
                 <input
                   type="checkbox"
-                  checked={user.active}
-                  onChange={e => setUser({ ...user, active: e.target.checked })}
+                  checked={user.is_active}
+                  onChange={e => setUser({ ...user, is_active: e.target.checked })}
                   className="w-5 h-5 mx-auto"
                 />
               </td>

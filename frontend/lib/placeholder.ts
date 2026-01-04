@@ -1,5 +1,5 @@
 export type bookType = {
-    book_id: number,
+    book_id: string,
     title: string,
     author: string,
     category: BookCategory,
@@ -38,7 +38,7 @@ export type userType = {
   username: string,
   full_name: string,
   role: userRoleType,
-  active: boolean
+  is_active: boolean
 }
 
 export type userCreationType = {
@@ -46,7 +46,7 @@ export type userCreationType = {
   password: string,
   full_name: string,
   role: userRoleType,
-  active: boolean
+  is_active: boolean
 }
 
 export type userRoleType = "member" | "librarian" | "admin"

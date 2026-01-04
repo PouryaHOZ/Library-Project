@@ -1,15 +1,15 @@
 [
   {
-    "book_id": 101,
+    "book_id": "d71c8971-e4d8-4949-b6c8-90df115f6308",
     "title": "شاهنامه",
     "author": "فردوسی",
     "category": "ادبیات",
-    "total_count": 5,
-    "available_count": 2,
+    "total_count": 4,
+    "available_count": 0,
     "is_removed": false
   },
   {
-    "book_id": 102,
+    "book_id": "998ebe6e-892d-4008-b449-029bd4f0a7c6",
     "title": "هری پاتر",
     "author": "جی. کی. رولینگ",
     "category": "تخیلی",
@@ -18,7 +18,7 @@
     "is_removed": false
   },
   {
-    "book_id": 103,
+    "book_id": "efdb0171-9094-49b9-a653-2445af4c747e",
     "title": "تاریخ بیهقی",
     "author": "ابوالفضل بیهقی",
     "category": "تاریخ",
@@ -27,7 +27,7 @@
     "is_removed": false
   },
   {
-    "book_id": 104,
+    "book_id": "7112db3d-bd62-42c5-a49f-65a677c03482",
     "title": "سس",
     "author": "سس",
     "category": "رمان",
