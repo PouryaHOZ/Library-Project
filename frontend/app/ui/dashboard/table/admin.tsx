@@ -1,5 +1,5 @@
 'use client'
-import { changeUserRole } from "@/lib/api";
+import { changeUserRole, removeUser } from "@/lib/api";
 import { userType } from "@/lib/placeholder";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
@@ -40,7 +40,14 @@ export function UserRow({user}: {user: userType}){
         }
     }
     const removeHandle = () => {
-
+        if (user.role == "admin")
+            alert("مجاز به حذف ادمین نیستی!")
+        else{
+            const confirm = window.confirm("آیا مطمئن هستید؟")
+        if(confirm){
+            removeUser(user.username)
+        }
+        }
     }
     return (
         <tr>

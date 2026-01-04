@@ -7,7 +7,12 @@ import json
 def get_users():
     with open('storage/users.json', 'r', encoding='utf-8') as f:
         users = json.load(f)
-    return users
+    
+    return [
+        user
+        for user in users
+        if user["is_removed"] == False
+    ]
 
 def get_loans():
     with open('storage/loans.json', 'r', encoding='utf-8') as f:
@@ -17,7 +22,13 @@ def get_loans():
 def get_books():
     with open('storage/books.json', 'r', encoding='utf-8') as f:
         books = json.load(f)
-    return books
+    
+    
+    return [
+        book
+        for book in books
+        if book["is_removed"] == False
+    ]
 
 
 #Dump JSON
@@ -58,6 +69,15 @@ def user_change_role(new_role: str, username: str):
         updated_users.append(user)
     return user
     
+def user_remove(username):
+    users = get_users()
+    updated_users = []
+    for user in users:
+        if user['username'] == username:
+            user["is_removed"] = True
+        updated_users.append(user)
+    
+    return dump_users(updated_users)
 
 
 #Book related functions
@@ -84,7 +104,8 @@ def add_book(details):
         "author": details['author'],
         "category": details["category"],
         "total_count": details["available_count"],        
-        "available_count": details["available_count"],        
+        "available_count": details["available_count"],
+        "is_removed": False
     }
     books.append(new_book)
     
@@ -95,8 +116,10 @@ def remove_book(book_id):
     updated_books = []
 
     for book in books:
-        if book["book_id"] != book_id:
-            updated_books.append(book)
+        if book["book_id"] == book_id:
+            book["is_removed"] = True
+            print(book)
+        updated_books.append(book)
     
     return dump_books(updated_books)
 

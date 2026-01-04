@@ -125,7 +125,7 @@ export async function removeBook(book_id: number){
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type:"remove_book", data:book_id }),
+        body: JSON.stringify({ type:"remove_book", book_id:book_id }),
     });
     location.replace("/dashboard")
     return response.json();
@@ -138,6 +138,18 @@ export async function changeUserRole(newRole: string, username:string){
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ type:"user_change_role", details:{new_role:newRole, username: username} }),
+    });
+    location.replace("/dashboard")
+    return response.json();
+}
+
+export async function removeUser(username: string){
+    const response = await fetch('http://localhost:8000/api', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type:"user_remove", username:username }),
     });
     location.replace("/dashboard")
     return response.json();

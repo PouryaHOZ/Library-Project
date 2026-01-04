@@ -18,12 +18,12 @@
     "status": "approved"
   },
   {
-    "loan_id": 103,
+    "loan_id": 104,
     "username": "ali_82",
-    "book_id": 101,
+    "book_id": 103,
     "book_amount": 1,
-    "rention_date": "2025-12-27",
-    "return_date": "2026-1-3",
+    "rention_date": "2025-12-29",
+    "return_date": "2026-01-05",
     "status": "approved"
   }
 ]
