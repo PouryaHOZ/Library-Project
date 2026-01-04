@@ -5,7 +5,8 @@
     "author": "فردوسی",
     "category": "ادبیات",
     "total_count": 5,
-    "available_count": 2
+    "available_count": 2,
+    "is_removed": false
   },
   {
     "book_id": 102,
@@ -13,7 +14,8 @@
     "author": "جی. کی. رولینگ",
     "category": "تخیلی",
     "total_count": 5,
-    "available_count": 2
+    "available_count": 2,
+    "is_removed": false
   },
   {
     "book_id": 103,
@@ -21,7 +23,8 @@
     "author": "ابوالفضل بیهقی",
     "category": "تاریخ",
     "total_count": 6,
-    "available_count": 3
+    "available_count": 3,
+    "is_removed": false
   },
   {
     "book_id": 104,
@@ -29,6 +32,7 @@
     "author": "سس",
     "category": "رمان",
     "total_count": 23,
-    "available_count": 23
+    "available_count": 23,
+    "is_removed": false
   }
 ]

@@ -67,7 +67,16 @@ def user_change_role(new_role: str, username: str):
         if user['username'] == username:
             user["role"] = new_role
         updated_users.append(user)
-    return user
+    return dump_users(users)
+
+def user_change_active(active: bool, username: str):
+    users = get_users()
+    updated_users = []
+    for user in users:
+        if user['username'] == username:
+            user["is_avtive"] = active
+        updated_users.append(user)
+    return dump_users(users)
     
 def user_remove(username):
     users = get_users()

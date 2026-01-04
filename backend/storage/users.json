@@ -4,27 +4,31 @@
     "password": "password123",
     "full_name": "مدیریت کل سیستم",
     "role": "admin",
-    "is_removed": false
+    "is_removed": false,
+    "is_active": true
   },
   {
     "username": "sara_lib",
     "password": "lib_pass_456",
     "full_name": "سارا رضایی",
     "role": "librarian",
-    "is_removed": false
+    "is_removed": false,
+    "is_active": true
   },
   {
     "username": "ali_82",
     "password": "ali_member_789",
     "full_name": "علی مرادی",
     "role": "member",
-    "is_removed": false
+    "is_removed": false,
+    "is_active": true
   },
   {
     "username": "reza_k",
     "password": "reza_pass_101",
     "full_name": "رضا کریمی",
     "role": "member",
-    "is_removed": true
+    "is_removed": false,
+    "is_active": true
   }
 ]

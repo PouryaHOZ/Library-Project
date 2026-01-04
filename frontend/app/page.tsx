@@ -33,13 +33,6 @@ export default function Main() {
           >
             ورود به سیستم
           </Link>
-
-          <Link
-            href="/search"
-            className="px-8 py-3 rounded-lg bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition-all"
-          >
-            جستجوی کتاب
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl">

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from placeholder import FetchRequest, LoginRequest
-from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, get_users, loan_return, remove_book, set_loan_state, update_book, user_change_role, user_remove
+from storage import add_book, add_loan, check_user, get_available_books, get_books, get_request_list, get_user_loans, get_users, loan_return, remove_book, set_loan_state, update_book, user_change_activation, user_change_active, user_change_role, user_remove
 
 app = FastAPI()
 # Adding premissions for all origins
@@ -98,6 +98,13 @@ def api(data:FetchRequest):
     elif data.type == "user_change_role":
         user_with_new_role = user_change_role(data.details.new_role, data.details.username)
         if user_with_new_role :
+            return {"status": "success"}
+        else:
+            return {"status": "failure"}
+
+    elif data.type == "user_change_active":
+        user_with_new_active = user_change_active(data.details.active, data.details.username)
+        if user_with_new_active :
             return {"status": "success"}
         else:
             return {"status": "failure"}
