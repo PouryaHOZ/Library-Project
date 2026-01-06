@@ -1,7 +1,7 @@
 'use client'
 
 import { addBook, updateBook, setLoanState, removeBook } from "@/lib/api";
-import { BOOK_CATEGORIES, BookCategory, bookType } from "@/lib/placeholder";
+import { BOOK_CATEGORIES, BookCategory, bookType, loanRequestType } from "@/lib/placeholder";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ export function RequestsTable({ requestList }: { requestList: any }) {
           <tr>
             <th className="py-2 px-4">نام کاربری</th>
             <th className="py-2 px-4">نام کامل</th>
+            <th className="py-2 px-4">نوع درخواست</th>
             <th className="py-2 px-4">نام کتاب</th>
             <th className="py-2 px-4">نویسنده</th>
             <th className="py-2 px-4">موضوع</th>
@@ -34,10 +35,16 @@ export function RequestsTable({ requestList }: { requestList: any }) {
                 setStatus(e.target.value);
                 setLoanState(ent.loan_id, e.target.value);
               };
+              const request_to_persian = {
+                "return": "بازگرداندن",
+                "rention": "امانت گرفتن",
+                "prolong": "تمدید کردن"
+              }
               return (
                 <tr key={`loan-${i}`} className="hover:bg-slate-50 transition-colors">
                   <td className="py-2 px-4">{ent.username}</td>
                   <td className="py-2 px-4">{ent.full_name}</td>
+                  <td className="py-2 px-4">{request_to_persian[ent.request as loanRequestType]}</td>
                   <td className="py-2 px-4">{ent.title}</td>
                   <td className="py-2 px-4">{ent.author}</td>
                   <td className="py-2 px-4">{ent.category}</td>

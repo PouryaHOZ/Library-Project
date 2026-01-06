@@ -5,46 +5,43 @@ import uuid
 
 
 #Get JSON
-def get_users():
-    with open('storage/users.json', 'r', encoding='utf-8') as f:
-        users = json.load(f)
+def get_database(file_name:str):
+    with open(f'storage/{file_name}', 'r', encoding='utf-8') as f:
+        db = json.load(f)
+
+        if db:
+            db_filtered = list(filter(lambda row: row['is_removed'] == False, db))
+            return db_filtered
+        return {}
     
-    return [
-        user
-        for user in users
-        if user["is_removed"] == False
-    ]
+def get_users():
+    return get_database("users.json")
 
 def get_loans():
-    with open('storage/loans.json', 'r', encoding='utf-8') as f:
-        loans = json.load(f)
-    return loans
+    return get_database("loans.json")
 
 def get_books():
-    with open('storage/books.json', 'r', encoding='utf-8') as f:
-        books = json.load(f)
-    
-    
-    return [
-        book
-        for book in books
-        if book["is_removed"] == False
-    ]
+    return get_database("books.json")
 
+def get_reqs():
+    return get_database("reqs.json")
 
 #Dump JSON
-def dump_users(data):
-    with open('storage/users.json', 'w', encoding='utf-8') as f:
+def dump_database(file_name: str, data):
+    with open(f'storage/{file_name}', 'w', encoding='utf-8') as f:
         return json.dump(data, f, ensure_ascii=False, indent=2)
+    
+def dump_users(data):
+    return dump_database("users.json", data)
 
 def dump_loans(data):
-    with open('storage/loans.json', 'w', encoding='utf-8') as f:
-        return json.dump(data, f, ensure_ascii=False, indent=2)
+    return dump_database("loans.json", data)
 
 def dump_books(data):
-    with open('storage/books.json', 'w', encoding='utf-8') as f:
-        return json.dump(data, f, ensure_ascii=False, indent=2)
+    return dump_database("books.json", data)
 
+def dump_reqs(data):
+    return dump_database("reqs.json", data)
 
 #User related functions
 def check_user(username: str, password: str):
@@ -175,19 +172,20 @@ def get_user_loans(username: str):
     else:
         return loans_list
 
-def add_loan(username, bookId):
-    loans = get_loans()
+def req_loan(username, bookId):
+    reqs = get_reqs()
     books = get_books()
-    new_loan = {
-        "loan_id": str(uuid.uuid4()),
+    new_req = {
+        "req_id": str(uuid.uuid4()),
         "username": username,
         "book_id": bookId,
         "book_amount": 1,
         "rention_date": datetime.now().strftime("%Y-%m-%d"),
         "return_date": (datetime.now() +timedelta(weeks=1)).strftime("%Y-%m-%d"),
-        "status": "pending"
+        "status": "pending",
+        "is_removed": False
     }
-    loans.append(new_loan)
+    reqs.append(new_req)
     
     new_books = []
     for book in books:
@@ -195,7 +193,7 @@ def add_loan(username, bookId):
             book["available_count"] -= 1
         new_books.append(book)
 
-    dump_loans(loans)
+    dump_reqs(reqs)
     dump_books(new_books)
 
 def loan_return(loan_id):
@@ -219,19 +217,95 @@ def loan_return(loan_id):
     dump_books(new_books)
     dump_loans(new_loans)
 
-def get_request_list():
+def get_loan_by_id(loan_id):
     loans = get_loans()
-    request_list = []
     for loan in loans:
-        if loan["status"] == "pending":
+        if loan["loan_id"] == loan_id:
+            return loan
+    return None
+
+def get_request_list():
+    loan_reqs = get_reqs()
+    request_list = []
+    
+    for req in loan_reqs:
+        if req["request"] == "rention":
+            book = get_book_by_id(req["book_id"])
+            user = get_user_by_username(req["username"])
+            if book and user:
+                request_list.append(book | user | req)
+                
+        elif req["request"] == "return":
+            loan = get_loan_by_id(req["loan_id"])
             book = get_book_by_id(loan["book_id"])
             user = get_user_by_username(loan["username"])
-            if type(book) == dict and type(user) == dict:
-                request_list.append(book | user | loan)
+            if book and user and loan:
+                request_list.append(book | user | loan | req)
 
     if len(request_list) > 0:
         return request_list
     return False
+
+def req_change_status(req, loan_reqs, new_status):
+    req["status"] = new_status
+    new_loan_reqs = []
+
+    for loan_req in loan_reqs:
+        if loan_req["req_id"] == req["req_id"]:
+            loan_req = req
+        new_loan_reqs.append(loan_req)
+
+    return dump_reqs(new_loan_reqs)
+
+
+def req_application(req_id):
+    loan_reqs = get_reqs()
+    req = {}
+
+    for loan_req in loan_reqs:
+        if loan_req["req_id"] == req_id:
+            loan_req = req
+    
+    if req["request"] == "rention": #Rention request
+        if req["status"] == "approved": 
+            new_loan = {
+                "loan_id": str(uuid.uuid4()),
+                "username": req["username"],
+                "book_id": req["book_id"],
+                "book_amount": 1,
+                "rention_date": datetime.now().strftime("%Y-%m-%d"),
+                "return_date": (datetime.now() +timedelta(weeks=1)).strftime("%Y-%m-%d"),
+                "status": "approved",
+                "is_removed": False
+            }
+            loans = get_loans()
+            loans.append(new_loan)
+            dump_loans(loans)
+            return req_change_status(req, loan_reqs, "approved")
+        else:
+            books = get_books()
+            for book in books:
+                if book["book_id"] == req["book_id"]:
+                    book["available_count"] += 1
+            dump_books(books)
+
+            return req_change_status(req, loan_reqs, "disapproved")
+            
+    elif req["request"] == "return": #Return request
+        if req["status"] == "approved":
+            loan_return(req["loan_id"])
+            return req_change_status(req, loan_reqs, "approved")
+        else:
+            return req_change_status(req, loan_reqs, "disapproved")
+        
+    elif req["request"] == "prolong": #Prolong request
+        if req["status"] == "approved":
+            loan = get_loan_by_id(req["loan_id"])
+            loan["return_date"] = (datetime.now() +timedelta(weeks=1)).strftime("%Y-%m-%d")
+            dump_loans(loan)
+            return req_change_status(req, loan_reqs, "approved")
+        else:
+            return req_change_status(req, loan_reqs, "disapproved")
 
 def set_loan_state(loan_id, data):
     loans = get_loans()
@@ -253,4 +327,3 @@ def set_loan_state(loan_id, data):
 
     dump_loans(loans)
     dump_books(new_books)
-
