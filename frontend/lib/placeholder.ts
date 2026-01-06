@@ -50,3 +50,4 @@ export type userCreationType = {
 }
 
 export type userRoleType = "member" | "librarian" | "admin"
+export type loanStatusType = "approved" | "disapproved" | "pending" 

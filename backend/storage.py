@@ -168,12 +168,24 @@ def get_user_loans(username: str):
             book_info = get_book_by_id(loan["book_id"])
             if book_info is None:
                 continue
+            penalty = loan_check_penalty(loan)
+            loan.update({"penalty": penalty})
             loans_list.append(loan | book_info)
     
     if len(loans_list) == 0:
         return None
     else:
         return loans_list
+    
+def loan_check_penalty(loan):
+    date_now = datetime.now()
+    return_date = datetime.strptime(loan["return_date"], "%Y-%m-%d") + timedelta(days=1)
+    if date_now > return_date:
+        delta_day = (date_now - return_date).days
+        PENALTY_VALUE_PER_DAY = 50_000
+        penalty = PENALTY_VALUE_PER_DAY * delta_day
+        return penalty
+    return 0
 
 def add_loan(username, bookId):
     loans = get_loans()
@@ -252,5 +264,6 @@ def set_loan_state(loan_id, data):
         i += 1
 
     dump_loans(loans)
-    dump_books(new_books)
+    if new_books:
+        dump_books(new_books)
 

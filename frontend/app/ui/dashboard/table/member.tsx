@@ -1,12 +1,16 @@
 'use client'
 
 import { loanProlongReq, loanReq, loanReturnReq } from "@/lib/api";
-import { bookType } from "@/lib/placeholder";
+import { bookType, loanStatusType } from "@/lib/placeholder";
 import { useState } from "react";
 import { ArrowPathIcon, CheckIcon } from "@heroicons/react/24/solid";
 
 export function LoanTable({ loanedBooks }: any) {
-
+  const status_to_persian = {
+    "approved": "تایید شده",
+    "disapproved": "تایید نشده",
+    "pending": "در انتظار",
+  }
   return (
     <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
       <table className="min-w-full text-center divide-y divide-slate-200">
@@ -18,6 +22,7 @@ export function LoanTable({ loanedBooks }: any) {
             <th className="py-3 px-4">تعداد درخواست شده</th>
             <th className="py-3 px-4">تاریخ درخواست</th>
             <th className="py-3 px-4">مهلت امانت</th>
+            <th className="py-3 px-4">جریمه</th>
             <th className="py-3 px-4">وضعیت</th>
             <th className="py-3 px-4">تمدید</th>
             <th className="py-3 px-4">بازگردانی</th>
@@ -25,23 +30,24 @@ export function LoanTable({ loanedBooks }: any) {
         </thead>
         <tbody className="divide-y divide-slate-100">
           {loanedBooks.status === "success" && loanedBooks.data.map((e: any, i: number) => (
-            <tr key={`loan-${i}`} className="hover:bg-slate-50 transition-colors">
+            <tr key={`loan-${i}`} className="hover:bg-slate-50  text-nowrap transition-colors">
               <td className="py-2 px-4">{e.title}</td>
               <td className="py-2 px-4">{e.author}</td>
               <td className="py-2 px-4">{e.category}</td>
               <td className="py-2 px-4">{e.book_amount}</td>
               <td className="py-2 px-4">{e.rention_date}</td>
               <td className="py-2 px-4">{e.return_date}</td>
+              <td className="py-2 px-4 text-red-500">{e.penalty}</td>
               <td className="py-2 px-4">
                 <span className={`px-2 py-1 rounded-full text-white text-sm 
                   ${e.status === "active" ? "bg-green-500" : "bg-gray-400"}`}>
-                  {e.status}
+                  {status_to_persian[e.status as loanStatusType]}
                 </span>
               </td>
               <td className="py-2 px-4">
                 <button
                   className="flex items-center justify-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg transition-all text-sm"
-                  onClick={() => loanProlongReq(e.loan_id)}
+                  onClick={() => e.penalty>0? alert("تا جریمه را به صورت حضوری پرداخت نکنید، امکان تمدید ندارید!") : loanProlongReq(e.loan_id)}
                 >
                   <ArrowPathIcon className="w-4 h-4" /> تمدید
                 </button>
@@ -49,7 +55,7 @@ export function LoanTable({ loanedBooks }: any) {
               <td className="py-2 px-4">
                 <button
                   className="flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg transition-all text-sm"
-                  onClick={() => loanReturnReq(e.loan_id)}
+                  onClick={() =>  e.penalty>0? alert("تا جریمه را به صورت حضوری پرداخت نکنید، امکان بازگردانی ندارید!") : loanReturnReq(e.loan_id)}
                 >
                   <CheckIcon className="w-4 h-4" /> بازگردانی
                 </button>
